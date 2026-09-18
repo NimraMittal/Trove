@@ -1,0 +1,57 @@
+.page {
+  min-height: 100vh;
+  padding: 48px max(4vw, calc((100vw - 1120px) / 2));
+  background: #f8f5ef;
+  color: #29251f;
+}
+
+.heading {
+  margin: 0 0 12px;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.notice {
+  margin: 0 0 28px;
+  color: #62594f;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid #e4ddd2;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.category {
+  margin: 0 0 12px;
+  color: #9a3412;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  margin: 0 0 12px;
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+}
+
+.description {
+  margin: 0;
+  color: #62594f;
+  line-height: 1.6;
+}
+
+@media (min-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

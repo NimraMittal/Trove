@@ -1,0 +1,45 @@
+generator client {
+  provider               = "prisma-client"
+  output                 = "../src/generated/prisma"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RecipeVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+model User {
+  id          String   @id @default(uuid()) @db.Uuid
+  email       String   @unique
+  displayName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recipes Recipe[]
+
+  @@map("users")
+}
+
+model Recipe {
+  id          String           @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  category    String
+  visibility  RecipeVisibility @default(PRIVATE)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  ownerId String @db.Uuid
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+
+  @@index([ownerId])
+  @@index([visibility, createdAt])
+  @@map("recipes")
+}

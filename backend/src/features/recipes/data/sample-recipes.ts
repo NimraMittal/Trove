@@ -1,4 +1,4 @@
-import type { RecipeSummary } from "../types/recipe.types";
+import type { RecipeSummary } from "../types/recipe.types.js";
 
 export const sampleRecipes: RecipeSummary[] = [
   {

@@ -18,3 +18,5 @@ coverage/
 
 # Earlier Vite backup, if present
 /frontend-vite-backup/
+
+/backend/src/generated/

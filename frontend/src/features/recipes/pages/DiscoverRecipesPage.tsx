@@ -14,9 +14,8 @@ export default function DiscoverRecipesPage({
       <h1 className={styles.heading}>Discover recipes</h1>
 
       <p className={styles.notice}>
-        Development preview using sample recipes.
+          Development recipes stored in PostgreSQL.
       </p>
-
       {recipes.length === 0 ? (
         <p>No recipes to display.</p>
       ) : (

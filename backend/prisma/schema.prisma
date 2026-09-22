@@ -22,6 +22,8 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  passwordCredential PasswordCredential?
+
   recipes Recipe[]
 
   @@map("users")
@@ -42,4 +44,13 @@ model Recipe {
   @@index([ownerId])
   @@index([visibility, createdAt])
   @@map("recipes")
+}
+
+model PasswordCredential {
+  userId       String @id @db.Uuid
+  passwordHash String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_credentials")
 }

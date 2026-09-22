@@ -36,3 +36,43 @@ export function findUserIdByEmail(email: string) {
     },
   });
 }
+
+export function findPasswordUserByEmail(email: string) {
+  return prisma.user.findUnique({
+    where: {
+      email,
+    },
+
+    select: {
+      id: true,
+      email: true,
+      displayName: true,
+
+      passwordCredential: {
+        select: {
+          passwordHash: true,
+        },
+      },
+    },
+  });
+}
+
+type CreateSessionInput = {
+  userId: string;
+  tokenHash: string;
+  expiresAt: Date;
+};
+
+export function createSession(input: CreateSessionInput) {
+  return prisma.session.create({
+    data: {
+      userId: input.userId,
+      tokenHash: input.tokenHash,
+      expiresAt: input.expiresAt,
+    },
+
+    select: {
+      id: true,
+    },
+  });
+}

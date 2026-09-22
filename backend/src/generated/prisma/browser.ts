@@ -32,3 +32,8 @@ export type Recipe = Prisma.RecipeModel
  * 
  */
 export type PasswordCredential = Prisma.PasswordCredentialModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel

@@ -12,4 +12,14 @@ export const registrationSchema = z.strictObject({
   password: z.string().min(15).max(128),
 });
 
+export const loginSchema = registrationSchema
+  .pick({
+    email: true,
+  })
+  .extend({
+    password: z.string().min(1).max(128),
+  });
+
+export type LoginInput = z.infer<typeof loginSchema>;
+
 export type RegistrationInput = z.infer<typeof registrationSchema>;

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { registerUser } from "./auth.service.js";
 import { registrationSchema } from "./auth.validation.js";
 import loginRouter from "./auth.login.routes.js";
+import sessionRouter from "./auth.session.routes.js";
 
 const authRouter = Router();
 
@@ -53,4 +54,5 @@ authRouter.post(
   },
 );
 authRouter.use(loginRouter);
+authRouter.use(sessionRouter);
 export default authRouter;

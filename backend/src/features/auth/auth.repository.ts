@@ -76,3 +76,32 @@ export function createSession(input: CreateSessionInput) {
     },
   });
 }
+
+export function findSessionByTokenHash(tokenHash: string) {
+  return prisma.session.findUnique({
+    where: {
+      tokenHash,
+    },
+
+    select: {
+      id: true,
+      expiresAt: true,
+
+      user: {
+        select: {
+          id: true,
+          email: true,
+          displayName: true,
+        },
+      },
+    },
+  });
+}
+
+export function deleteSessionByTokenHash(tokenHash: string) {
+  return prisma.session.deleteMany({
+    where: {
+      tokenHash,
+    },
+  });
+}

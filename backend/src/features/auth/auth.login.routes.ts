@@ -5,6 +5,7 @@ import { rateLimit } from "express-rate-limit";
 
 import { loginUser } from "./auth.login.service.js";
 import { loginSchema } from "./auth.validation.js";
+import { getSessionCookieName } from "./auth.session.js";
 
 const loginRouter = Router();
 
@@ -23,9 +24,7 @@ if (isProduction && applicationUrl.protocol !== "https:") {
   throw new Error("APP_ORIGIN must use HTTPS in production.");
 }
 
-const sessionCookieName = isProduction
-  ? "__Host-trove_session"
-  : "trove_session";
+const sessionCookieName = getSessionCookieName();
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,

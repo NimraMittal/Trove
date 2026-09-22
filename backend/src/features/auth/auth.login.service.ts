@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 import { hashPassword, verifyPassword } from "./auth.password.js";
 
@@ -9,6 +9,12 @@ import {
 
 import type { LoginInput } from "./auth.validation.js";
 
+import {
+  createSessionToken,
+  hashSessionToken,
+  SESSION_LIFETIME_MS,
+} from "./auth.session.js";
+
 // Prepared once when this module loads.
 // Used to avoid skipping password verification for unknown accounts.
 const dummyPasswordHash = await hashPassword(
@@ -16,7 +22,6 @@ const dummyPasswordHash = await hashPassword(
 );
 
 // Initial product decision: a session lasts at most 24 hours.
-const SESSION_LIFETIME_MS = 24 * 60 * 60 * 1000;
 
 export async function loginUser(input: LoginInput) {
   const user = await findPasswordUserByEmail(input.email);
@@ -33,13 +38,12 @@ export async function loginUser(input: LoginInput) {
     return null;
   }
 
-  const token = randomBytes(32).toString("hex");
+  const token = createSessionToken();
+  const tokenHash = hashSessionToken(token);
 
-  const tokenHash = createHash("sha256")
-    .update(token)
-    .digest("hex");
-
-  const expiresAt = new Date(Date.now() + SESSION_LIFETIME_MS);
+  const expiresAt = new Date(
+    Date.now() + SESSION_LIFETIME_MS,
+  );
 
   await createSession({
     userId: user.id,
@@ -58,3 +62,4 @@ export async function loginUser(input: LoginInput) {
     },
   };
 }
+

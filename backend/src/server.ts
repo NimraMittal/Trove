@@ -1,15 +1,29 @@
 import app from "./app.js";
 
-const port = Number(process.env.PORT ?? "3000");
+const port = Number(
+  process.env.PORT ?? "3000",
+);
 
-if (!Number.isInteger(port) || port < 1 || port > 65535) {
-  throw new Error("PORT must be an integer between 1 and 65535.");
+if (
+  !Number.isInteger(port) ||
+  port < 1 ||
+  port > 65535
+) {
+  throw new Error(
+    "PORT must be an integer between 1 and 65535.",
+  );
 }
 
-app.listen(port, (error) => {
-  if (error) {
-    throw error;
-  }
+app.listen(
+  port,
+  "0.0.0.0",
+  (error) => {
+    if (error) {
+      throw error;
+    }
 
-  console.log(`Trove API is running on port ${port}`);
-});
+    console.log(
+      `Trove API is running on port ${port}`,
+    );
+  },
+);

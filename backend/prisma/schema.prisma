@@ -24,7 +24,8 @@ model User {
 
   passwordCredential PasswordCredential?
 
-  recipes Recipe[]
+  recipes  Recipe[]
+  sessions Session[]
 
   @@map("users")
 }
@@ -53,4 +54,18 @@ model PasswordCredential {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("password_credentials")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  tokenHash String   @unique @db.Char(64)
+  userId    String   @db.Uuid
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
 }

@@ -24,14 +24,20 @@
   gap: 32px;
 }
 
-.logo {
-  color: #5b2d1c;
+.logoLink {
+  display: inline-flex;
+  align-items: center;
 
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.8rem;
-  font-weight: 700;
+  flex-shrink: 0;
 
   text-decoration: none;
+}
+
+.logoImage {
+  width: auto;
+  height: 54px;
+
+  object-fit: contain;
 }
 
 .navigation {
@@ -82,6 +88,10 @@
     min-height: 64px;
   }
 
+  .logoImage {
+    height: 44px;
+  }
+
   .navigation {
     display: none;
   }
@@ -89,4 +99,33 @@
   .comingSoon {
     display: none;
   }
+}
+
+.exploreButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+
+  padding: 0 16px;
+
+  color: #fffaf5;
+  background: #ad441a;
+
+  border-radius: 9px;
+
+  font-size: 0.86rem;
+  font-weight: 650;
+
+  text-decoration: none;
+
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.exploreButton:hover {
+  background: #963814;
+  transform: translateY(-1px);
 }

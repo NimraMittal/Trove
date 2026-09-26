@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import LandingPage from "@/features/home/pages/LandingPage";
 
 export default function HomePage() {
-  redirect("/recipes");
+  return <LandingPage />;
 }

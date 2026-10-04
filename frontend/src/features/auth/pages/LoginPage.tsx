@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import AuthLayout from "../components/AuthLayout";
+import LoginForm from "../components/LoginForm";
 
 import styles from "../auth.module.css";
 
@@ -17,47 +18,11 @@ export default function LoginPage() {
         </h1>
 
         <p className={styles.subtitle}>
-          Sign in to save recipes, document attempts,
-          and continue building your collection.
+          Sign in to continue exploring Trove.
         </p>
       </div>
 
-      <form className={styles.form}>
-        <div className={styles.field}>
-          <label htmlFor="email">
-            Email
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            name="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="password">
-            Password
-          </label>
-
-          <input
-            id="password"
-            type="password"
-            name="password"
-            autoComplete="current-password"
-            placeholder="Your password"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className={styles.primaryButton}
-        >
-          Sign in
-        </button>
-      </form>
+      <LoginForm />
 
       <p className={styles.switchText}>
         New to Trove?{" "}

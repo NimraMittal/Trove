@@ -6,26 +6,16 @@ import { rateLimit } from "express-rate-limit";
 import { loginUser } from "./auth.login.service.js";
 import { loginSchema } from "./auth.validation.js";
 
+import {
+  requireAllowedOrigin,
+} from "./auth.origin.middleware.js";
+
+import {
+  getSessionCookieName,
+  getSessionCookieOptions,
+} from "./auth.session.js";
+
 const loginRouter = Router();
-
-const configuredOrigin = process.env.APP_ORIGIN;
-
-if (!configuredOrigin) {
-  throw new Error("APP_ORIGIN is not configured.");
-}
-
-const applicationUrl = new URL(configuredOrigin);
-const allowedOrigin = applicationUrl.origin;
-
-const isProduction = process.env.NODE_ENV === "production";
-
-if (isProduction && applicationUrl.protocol !== "https:") {
-  throw new Error("APP_ORIGIN must use HTTPS in production.");
-}
-
-const sessionCookieName = isProduction
-  ? "__Host-trove_session"
-  : "trove_session";
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -41,25 +31,26 @@ const loginLimiter = rateLimit({
 loginRouter.post(
   "/login",
 
-  (req, res, next) => {
-    res.setHeader("Cache-Control", "no-store");
+  requireAllowedOrigin,
 
-    if (req.get("origin") !== allowedOrigin) {
-      res.status(403).json({
-        message: "Request origin is not allowed.",
-      });
-      return;
-    }
+  (req, res, next) => {
+    res.setHeader(
+      "Cache-Control",
+      "no-store",
+    );
 
     if (!req.is("application/json")) {
       res.status(415).json({
-        message: "Send the request using application/json.",
+        message:
+          "Send the request using application/json.",
       });
+
       return;
     }
 
     next();
   },
+  
 
   loginLimiter,
 
@@ -85,13 +76,14 @@ loginRouter.post(
       return;
     }
 
-    res.cookie(sessionCookieName, result.token, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: "lax",
-      path: "/",
-      expires: result.expiresAt,
-    });
+    res.cookie(
+  getSessionCookieName(),
+  result.token,
+  {
+    ...getSessionCookieOptions(),
+    expires: result.expiresAt,
+  },
+);
 
     res.status(200).json({
       user: result.user,

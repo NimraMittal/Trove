@@ -5,6 +5,12 @@ import { z } from "zod";
 import { registerUser } from "./auth.service.js";
 import { registrationSchema } from "./auth.validation.js";
 import loginRouter from "./auth.login.routes.js";
+import sessionRouter
+  from "./auth.session.routes.js";
+
+import {
+  requireAllowedOrigin,
+} from "./auth.origin.middleware.js";
 
 const authRouter = Router();
 
@@ -21,6 +27,7 @@ const registrationLimiter = rateLimit({
 
 authRouter.post(
   "/register",
+  requireAllowedOrigin,
   registrationLimiter,
   express.json({ limit: "16kb" }),
 
@@ -53,4 +60,5 @@ authRouter.post(
   },
 );
 authRouter.use(loginRouter);
+authRouter.use(sessionRouter);
 export default authRouter;

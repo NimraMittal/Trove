@@ -1,0 +1,130 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+
+  max-width: 100%;
+  gap: 10px;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 0 8px;
+
+  color: #493a30;
+
+  font-size: 0.9rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.textLink:hover {
+  color: #963814;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 0 16px;
+
+  border: 0;
+  border-radius: 9px;
+
+  color: #fffaf5;
+  background: #ad441a;
+
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 650;
+
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) {
+  background: #963814;
+}
+
+.button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.outlineButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+  padding: 0 16px;
+
+  border: 1.5px solid #ad441a;
+  border-radius: 9px;
+
+  color: #ad441a;
+  background: transparent;
+
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 650;
+
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.outlineButton:hover {
+  background: rgba(173, 68, 26, 0.08);
+}
+
+.button:focus-visible,
+.outlineButton:focus-visible,
+.textLink:focus-visible {
+  outline: 3px solid #7d351c;
+  outline-offset: 3px;
+}
+
+.name {
+  max-width: 14ch;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #493a30;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.message {
+  color: #6c625a;
+  font-size: 0.82rem;
+}
+
+.error {
+  flex-basis: 100%;
+  max-width: 28ch;
+
+  margin: 0;
+
+  color: #a83b24;
+
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .name {
+    max-width: 12ch;
+  }
+}

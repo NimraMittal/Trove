@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import AuthHeaderActions from "@/features/auth/components/AuthHeaderActions";
+
+import PrimaryNav from "./PrimaryNav";
 import styles from "./SiteHeader.module.css";
 
 export default function SiteHeader() {
@@ -22,31 +25,10 @@ export default function SiteHeader() {
           />
         </Link>
 
-        <nav
-          className={styles.navigation}
-          aria-label="Primary navigation"
-        >
-          <Link href="/">Home</Link>
-
-          <Link href="/recipes">
-            Recipes
-          </Link>
-
-          <span
-            className={styles.disabledLink}
-            aria-disabled="true"
-          >
-            Collections
-          </span>
-        </nav>
+        <PrimaryNav />
 
         <div className={styles.actions}>
-          <Link
-            href="/recipes"
-            className={styles.exploreButton}
-          >
-            Explore Recipes
-          </Link>
+          <AuthHeaderActions />
         </div>
       </div>
     </header>

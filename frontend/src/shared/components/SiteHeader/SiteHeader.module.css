@@ -72,6 +72,13 @@
   color: #b64b21;
 }
 
+.activeLink {
+  color: #b64b21;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+
 .disabledLink {
   color: #8c837a;
 
@@ -85,6 +92,9 @@
 
   display: flex;
   align-items: center;
+
+  min-width: 0;
+  max-width: 100%;
 }
 
 .comingSoon {
@@ -145,4 +155,17 @@
 .exploreButton:hover {
   background: #963814;
   transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .inner {
+    grid-template-columns: 1fr;
+    row-gap: 0;
+
+    padding: 8px 0 12px;
+  }
+
+  .actions {
+    justify-self: end;
+  }
 }

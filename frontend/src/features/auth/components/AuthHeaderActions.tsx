@@ -151,16 +151,22 @@ function SessionActions() {
       className={styles.controls}
       aria-busy={isLoggingOut}
     >
-      <span
-        className={styles.name}
-        title={account.user.displayName}
-      >
-        {account.user.displayName}
-      </span>
+      <div className={styles.userProfile}>
+        <span className={styles.avatar} aria-hidden="true">
+          {account.user.displayName.trim().charAt(0).toUpperCase()}
+        </span>
+
+        <span
+          className={styles.name}
+          title={account.user.displayName}
+        >
+          {account.user.displayName}
+        </span>
+      </div>
 
       <button
         type="button"
-        className={styles.button}
+        className={styles.logoutButton}
         onClick={handleLogout}
         disabled={isLoggingOut}
       >

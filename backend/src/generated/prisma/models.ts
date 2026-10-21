@@ -10,6 +10,8 @@
  */
 export type * from './models/User.js'
 export type * from './models/Recipe.js'
+export type * from './models/RecipeIngredient.js'
+export type * from './models/RecipeStep.js'
 export type * from './models/PasswordCredential.js'
 export type * from './models/Session.js'
 export type * from './commonInputTypes.js'

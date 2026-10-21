@@ -55,27 +55,64 @@
 
   gap: 30px;
 }
+
+.navContainer {
+  justify-self: center;
+}
+
+.menuToggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 8px;
+  color: #3b332d;
+  background: transparent;
+  cursor: pointer;
+}
+
+.menuToggle:hover {
+  background: #eee4d8;
+}
+
+.menuToggle:focus-visible,
+.navigation a:focus-visible,
+.logoLink:focus-visible {
+  outline: 3px solid #7d351c;
+  outline-offset: 3px;
+}
 .navigation a {
   color: #3b332d;
 
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 500;
 
   text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 2.5px solid transparent;
 
   transition:
     color 160ms ease,
-    opacity 160ms ease;
+    border-color 160ms ease;
 }
 
 .navigation a:hover {
   color: #b64b21;
 }
 
+.activeLink {
+  color: #b64b21 !important;
+  font-weight: 600;
+  border-bottom-color: #b64b21 !important;
+}
+
 .disabledLink {
   color: #8c837a;
 
-  font-size: 0.92rem;
+  font-size: 0.95rem;
+  padding: 4px 0;
 
   cursor: not-allowed;
 }
@@ -85,6 +122,9 @@
 
   display: flex;
   align-items: center;
+
+  min-width: 0;
+  max-width: 100%;
 }
 
 .comingSoon {
@@ -116,6 +156,41 @@
   .navigation {
     display: none;
   }
+
+  .navContainer {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .menuToggle {
+    display: inline-flex;
+  }
+
+  .navigationOpen {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 16px 4%;
+    flex-wrap: wrap;
+    gap: 24px;
+    background: #fcf8f1;
+    border-bottom: 1px solid #e8dfd3;
+    box-shadow: 0 8px 16px rgb(59 51 45 / 8%);
+  }
+
+  .navigation a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .actions {
+    grid-column: 1 / -1;
+    padding-bottom: 10px;
+  }
 }
 
 .exploreButton {
@@ -145,4 +220,17 @@
 .exploreButton:hover {
   background: #963814;
   transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0;
+
+    padding: 8px 0 12px;
+  }
+
+  .actions {
+    justify-self: end;
+  }
 }

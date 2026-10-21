@@ -140,3 +140,65 @@ export async function register(
     );
   }
 }
+
+export async function getCurrentUser(
+  signal?: AbortSignal,
+): Promise<AuthUser | null> {
+  const response = await fetch("/api/auth/me", {
+    method: "GET",
+
+    headers: {
+      Accept: "application/json",
+    },
+
+    credentials: "same-origin",
+    cache: "no-store",
+    signal: signal ?? null,
+  });
+
+  // A visitor without a valid session is a normal signed-out state.
+  if (response.status === 401) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error("Unable to check your account right now.");
+  }
+
+  const body: unknown = await response.json().catch(() => null);
+
+  if (!isLoginResponse(body)) {
+    throw new Error("The server returned an unexpected account response.");
+  }
+
+  return body.user;
+}
+
+export async function logout(): Promise<void> {
+  const response = await fetch("/api/auth/logout", {
+    method: "POST",
+
+    headers: {
+      Accept: "application/json",
+    },
+
+    credentials: "same-origin",
+    cache: "no-store",
+  }).catch(() => {
+    throw new Error(
+      "Could not reach Trove. Please try logging out again.",
+    );
+  });
+
+  // Our logout endpoint returns success without a response body.
+  if (response.status === 204) {
+    return;
+  }
+
+  const body: unknown = await response.json().catch(() => null);
+
+  throw new Error(
+    getErrorMessage(body) ??
+      "Logout could not be confirmed. Please try again.",
+  );
+}

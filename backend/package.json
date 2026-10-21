@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "build": "prisma generate && tsc",
     "start": "node dist/server.js",
-    "test:auth": "tsx --test src/features/auth/auth.test.ts"
+    "test:auth": "tsx --test src/features/auth/auth.test.ts",
+    "test:recipe-schema": "tsx --test src/features/recipes/recipes.schema.test.ts"
   },
   "keywords": [],
   "author": "",

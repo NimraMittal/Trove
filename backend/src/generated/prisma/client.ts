@@ -52,6 +52,16 @@ export type User = Prisma.UserModel
  */
 export type Recipe = Prisma.RecipeModel
 /**
+ * Model RecipeIngredient
+ * 
+ */
+export type RecipeIngredient = Prisma.RecipeIngredientModel
+/**
+ * Model RecipeStep
+ * 
+ */
+export type RecipeStep = Prisma.RecipeStepModel
+/**
  * Model PasswordCredential
  * 
  */

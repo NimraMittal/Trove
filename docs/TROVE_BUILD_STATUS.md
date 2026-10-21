@@ -4,33 +4,21 @@ Updated: 21 October 2026 (Asia/Kolkata).
 
 ## Current review checkpoint
 
-Stopped for user review. Preserve all existing work and keep one focused
-feature per PR. Follow: Inspect → Plan → Implement → Test → Review → Commit
-→ Push → PR → User approval → Merge → Next feature.
-
-The user approved final review, checks, and a local commit limited to the
-six reviewed files. Local commit message: `feat(nav): add accessible mobile
-navigation`. Existing commits remain unchanged. The proposed header PR is
-drafted locally, not published; its GitHub number and URL are pending
-publication approval. No GitHub tracker writes were made at this checkpoint.
-Do not push, create the GitHub PR, merge, deploy, start another feature,
-create another branch, or apply migrations without further approval.
+Structured recipe data is implemented and locally verified on
+`feat/structured-recipes`. Changes remain unstaged and uncommitted for user
+review. The user handles all Git staging, commits, pushes, PRs, and merges.
+No recipe UI, detail API, creation flow, save, fork, collection, deployment,
+or production database work is included.
 
 ## Milestone 0 — Authentication-aware header
 
-IMPLEMENTED on `feat/auth-header`. Existing commits `3e51735` and `00c6074`
-were preserved; the initial working tree was clean. Local `main` and cached
-`origin/main` point to `00924c1` (PR #18). A connected GitHub search for
-`repo:NimraMittal/Trove is:pr head:feat/auth-header` returned no PRs.
-The remote refs have not been refreshed; current remote branch existence
-and the latest main commit are not independently confirmed.
+MERGED through PR #19. Local merge commit: `d78aa99`. Existing commits
+`3e51735`, `00c6074`, and `45a2d0a` remain in history.
 
 Existing code includes registration/login forms, Argon2 password hashing,
 database sessions with hashed tokens, HttpOnly cookies, current-user and
 logout endpoints, shared session-aware headers, and database-backed public
-recipe discovery. These are implementation findings, not claims of complete
-end-to-end verification. Discovery still has preview copy and basic cards.
-Structured ingredients/instructions are not yet present in the Prisma schema.
+recipe discovery. Discovery still has preview copy and basic cards.
 
 Changes in this review:
 
@@ -67,27 +55,49 @@ Final browser checks run against the production build served locally.
 Build/font downloads and Chrome/tsx sockets required execution outside the
 restricted sandbox; successful results came from approved reruns.
 
-PENDING VERIFICATION / REVIEW GATE:
+The user reported completing real authentication testing and will report any
+failures separately. The automated Chrome fixture test remains distinct from
+that manual integration testing. DEPLOYED status was not verified here.
 
-- Full local register → login → refresh → current user → logout lifecycle,
-  plus session invalidation against a confirmed isolated test PostgreSQL DB.
-  No database connection strings or secrets were inspected, no DB writes
-  were attempted, and no migrations were run in this task.
-- Recipe-route browser/session navigation against the actual backend.
-- Mobile visual review against the supplied reference and assistive-technology
-  review; DOM/layout checks are not a complete accessibility audit.
-- Confirm remote branch status and obtain permission before remote Git writes.
+## Milestone 1 — Structured recipe data
 
-MERGED: not confirmed for this milestone. DEPLOYED: not performed or verified.
-The approved local navigation commit includes the six reviewed files only;
-see `git log` for its generated hash. No pushes, PR creation, merges, schema
-changes, migrations, or deployments were performed. Review material and
-Fedora session-testing instructions: `docs/AUTH_HEADER_PR.md`.
+IMPLEMENTED and LOCALLY VERIFIED on `feat/structured-recipes`:
 
-## Next milestone — Recipe foundation
+- Added recipe-owned ingredients with UUIDs, names, optional decimal
+  quantities, optional units and notes, and zero-based positions.
+- Added recipe-owned cooking steps with UUIDs, instruction text, and
+  zero-based positions.
+- Added compound uniqueness per recipe and database-enforced nonnegative
+  position checks.
+- Added cascade deletion from recipes to ingredients and steps while keeping
+  User → Recipe `RESTRICT` and recipe visibility unchanged.
+- Added a guarded local-database integration test with explicit, ID-scoped
+  cleanup. It verifies ordering, nullable quantities, notes, uniqueness,
+  nonnegative positions, cross-recipe position reuse, cascade deletion, and
+  the unchanged public recipe summary response.
 
-Begin only after header review, merge, and explicit approval for the next
-feature, per the requested workflow. Propose
-structured ingredient and ordered instruction models with ownership,
-visibility, deletion rules, and migration risks before requesting approval
-for a migration. No migration is pending execution in this change.
+Migration `20261021163746_add_structured_recipe_data` was inspected before
+application and applied only to local `127.0.0.1:5432/trove_development`.
+It creates two tables, two compound unique indexes, two check constraints,
+and two cascade foreign keys. It contains no recipe updates or deletions.
+Recipe count was 4 before and 4 after migration and testing. All four
+migrations are applied locally with none rolled back.
+
+Verification passed:
+
+- Prisma format and validation.
+- Prisma Client generation using the existing Prisma 7 configuration.
+- Backend TypeScript typecheck and production build.
+- Three existing authentication tests.
+- Two structured-recipe schema/API integration tests.
+- Prisma migration status reports the local database is up to date.
+
+LIMITATIONS / PENDING:
+
+- Existing recipes have empty ingredient and step relations because no
+  honest legacy source exists for backfill.
+- PostgreSQL check constraints live in customized migration SQL because
+  Prisma Schema Language does not represent them.
+- Production migration is not applied. No deployment was performed.
+- This feature is not committed, pushed, or merged. The next feature remains
+  unapproved until this focused PR is reviewed and merged.

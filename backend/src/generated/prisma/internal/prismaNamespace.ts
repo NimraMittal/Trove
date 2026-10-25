@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  AuthIdentity: 'AuthIdentity',
   Recipe: 'Recipe',
   RecipeIngredient: 'RecipeIngredient',
   RecipeStep: 'RecipeStep',
@@ -418,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "recipe" | "recipeIngredient" | "recipeStep" | "passwordCredential" | "session"
+    modelProps: "user" | "authIdentity" | "recipe" | "recipeIngredient" | "recipeStep" | "passwordCredential" | "session"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -493,6 +494,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    AuthIdentity: {
+      payload: Prisma.$AuthIdentityPayload<ExtArgs>
+      fields: Prisma.AuthIdentityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuthIdentityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuthIdentityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>
+        }
+        findFirst: {
+          args: Prisma.AuthIdentityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuthIdentityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>
+        }
+        findMany: {
+          args: Prisma.AuthIdentityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>[]
+        }
+        create: {
+          args: Prisma.AuthIdentityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>
+        }
+        createMany: {
+          args: Prisma.AuthIdentityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuthIdentityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>[]
+        }
+        delete: {
+          args: Prisma.AuthIdentityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>
+        }
+        update: {
+          args: Prisma.AuthIdentityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuthIdentityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuthIdentityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuthIdentityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuthIdentityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthIdentityPayload>
+        }
+        aggregate: {
+          args: Prisma.AuthIdentityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuthIdentity>
+        }
+        groupBy: {
+          args: Prisma.AuthIdentityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthIdentityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuthIdentityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthIdentityCountAggregateOutputType> | number
         }
       }
     }
@@ -916,6 +991,17 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const AuthIdentityScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  subject: 'subject',
+  createdAt: 'createdAt'
+} as const
+
+export type AuthIdentityScalarFieldEnum = (typeof AuthIdentityScalarFieldEnum)[keyof typeof AuthIdentityScalarFieldEnum]
+
+
 export const RecipeScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -1027,6 +1113,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AuthProvider'
+ */
+export type EnumAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthProvider'>
+    
+
+
+/**
+ * Reference to a field of type 'AuthProvider[]'
+ */
+export type ListEnumAuthProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthProvider[]'>
     
 
 
@@ -1237,6 +1337,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  authIdentity?: Prisma.AuthIdentityOmit
   recipe?: Prisma.RecipeOmit
   recipeIngredient?: Prisma.RecipeIngredientOmit
   recipeStep?: Prisma.RecipeStepOmit

@@ -15,3 +15,10 @@ export const RecipeVisibility = {
 } as const
 
 export type RecipeVisibility = (typeof RecipeVisibility)[keyof typeof RecipeVisibility]
+
+
+export const AuthProvider = {
+  GOOGLE: 'GOOGLE'
+} as const
+
+export type AuthProvider = (typeof AuthProvider)[keyof typeof AuthProvider]

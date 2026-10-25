@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  AuthIdentity: 'AuthIdentity',
   Recipe: 'Recipe',
   RecipeIngredient: 'RecipeIngredient',
   RecipeStep: 'RecipeStep',
@@ -84,6 +85,17 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const AuthIdentityScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  subject: 'subject',
+  createdAt: 'createdAt'
+} as const
+
+export type AuthIdentityScalarFieldEnum = (typeof AuthIdentityScalarFieldEnum)[keyof typeof AuthIdentityScalarFieldEnum]
 
 
 export const RecipeScalarFieldEnum = {

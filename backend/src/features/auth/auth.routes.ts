@@ -5,6 +5,7 @@ import { z } from "zod";
 import { registerUser } from "./auth.service.js";
 import { registrationSchema } from "./auth.validation.js";
 import loginRouter from "./auth.login.routes.js";
+import googleAuthRouter from "./auth.google.routes.js";
 import sessionRouter
   from "./auth.session.routes.js";
 
@@ -60,5 +61,6 @@ authRouter.post(
   },
 );
 authRouter.use(loginRouter);
+authRouter.use(googleAuthRouter);
 authRouter.use(sessionRouter);
 export default authRouter;

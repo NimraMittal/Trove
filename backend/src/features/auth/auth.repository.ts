@@ -1,4 +1,11 @@
+import { AuthProvider } from "../../generated/prisma/client.js";
 import { prisma } from "../../shared/database/prisma.js";
+
+const sessionUserSelect = {
+  id: true,
+  email: true,
+  displayName: true,
+} as const;
 
 type CreatePasswordUserInput = {
   email: string;
@@ -54,6 +61,47 @@ export function findPasswordUserByEmail(email: string) {
         },
       },
     },
+  });
+}
+
+export function findGoogleUserBySubject(subject: string) {
+  return prisma.authIdentity.findUnique({
+    where: {
+      provider_subject: {
+        provider: AuthProvider.GOOGLE,
+        subject,
+      },
+    },
+
+    select: {
+      user: {
+        select: sessionUserSelect,
+      },
+    },
+  });
+}
+
+type CreateGoogleUserInput = {
+  email: string;
+  displayName: string;
+  subject: string;
+};
+
+export function createGoogleUser(input: CreateGoogleUserInput) {
+  return prisma.user.create({
+    data: {
+      email: input.email,
+      displayName: input.displayName,
+
+      authIdentities: {
+        create: {
+          provider: AuthProvider.GOOGLE,
+          subject: input.subject,
+        },
+      },
+    },
+
+    select: sessionUserSelect,
   });
 }
 

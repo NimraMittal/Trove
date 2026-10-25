@@ -4,12 +4,11 @@ Updated: 25 October 2026 (Asia/Kolkata).
 
 ## Current review checkpoint
 
-Password visibility and authentication-form usability are implemented and
-locally verified on `feat/auth-password-visibility`. Changes remain unstaged
-and uncommitted for user review. The user handles all Git staging, commits,
-pushes, PRs, and merges. Google authentication, password recovery, email
-verification, backend authentication, database, and deployment changes are
-outside this PR.
+Google authentication backend support is implemented and locally verified on
+`feat/auth-google-backend`. Changes remain unstaged and uncommitted for user
+review. The user handles all Git staging, commits, pushes, PRs, and merges.
+The Google button, explicit account linking, password recovery, and additional
+email verification remain separate future features.
 
 ## Milestone 0 — Authentication-aware header
 
@@ -106,7 +105,7 @@ LIMITATIONS / PENDING:
 
 ## Milestone 2 — Password visibility and authentication form UX
 
-IMPLEMENTED and LOCALLY VERIFIED on `feat/auth-password-visibility`:
+MERGED through PR #21. Merge commit: `abb09d2`.
 
 - Added a reusable password field with an inline eye control, hidden-by-default
   values, stable spacing, and visible pointer and keyboard focus states.
@@ -136,8 +135,44 @@ fixtures. It does not exercise Express, PostgreSQL, real cookies, password
 hashing, or a deployed environment. No real browser/backend authentication
 test was run for this frontend-only change.
 
-LIMITATIONS / PENDING:
+## Milestone 3 — Google authentication backend foundation
 
-- The feature is not committed, pushed, merged, or deployed.
-- Google authentication remains a separate backend-foundation PR after this
-  PR is reviewed and merged.
+IMPLEMENTED and LOCALLY VERIFIED on `feat/auth-google-backend`:
+
+- Added provider identities keyed by the verified Google `sub`, with unique
+  provider/subject and user/provider constraints and cascade deletion.
+- Added official Google ID-token verification with an exact web-client
+  audience and controlled handling for invalid credentials.
+- Limited automatic user creation to verified Gmail identities and verified
+  Google Workspace identities with an `hd` claim.
+- Rejected existing-email collisions without silently linking accounts.
+- Reused Trove's hashed database sessions and existing HttpOnly cookie policy.
+- Added origin, strict JSON, body-size, token-size, and rate-limit protections.
+- Kept email/password registration, login, current-user, and logout behavior.
+
+Local migration `20261025132155_add_google_auth_identities` was generated with
+`--create-only`, inspected, and applied only to
+`127.0.0.1:5432/trove_development`. It creates one enum, one table, two unique
+indexes, and one cascade foreign key. It contains no updates or deletes.
+Existing counts were preserved by the migration: 6 users, 5 password
+credentials, 9 sessions, and 4 recipes. The new identity table started empty.
+
+Verification covers mocked Google verifier outcomes, local database identity
+creation and concurrency, session hashing, cookie attributes, request origin
+and validation, controlled collisions, database uniqueness/cascade behavior,
+and password login/session revocation regression. No real Google sign-in has
+been run. Production needs `GOOGLE_WEB_CLIENT_ID` before the endpoint can be
+used; account linking and the frontend Google button remain future PRs.
+
+Final checks passed: Prisma validation, Prisma Client generation, backend
+typecheck and build, 3 existing authentication tests, 22 Google authentication
+tests, 2 recipe schema/discovery regression tests, and migration status. Test
+cleanup restored the same local counts and left 0 provider identities.
+
+DEPENDENCY FOLLOW-UP:
+
+- `npm audit --omit=dev` reports 8 existing transitive/direct dependency
+  advisories (6 high, 2 moderate) through Express/body-parser,
+  express-rate-limit, Prisma, and Zod. `google-auth-library` is not in any
+  reported vulnerable path. The dry-run remediation changes several existing
+  packages together, so it belongs in a focused dependency-maintenance PR.

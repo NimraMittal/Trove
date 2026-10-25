@@ -10,6 +10,7 @@
     "build": "prisma generate && tsc",
     "start": "node dist/server.js",
     "test:auth": "tsx --test src/features/auth/auth.test.ts",
+    "test:auth-google": "tsx --test src/features/auth/auth.google.test.ts",
     "test:recipe-schema": "tsx --test src/features/recipes/recipes.schema.test.ts"
   },
   "keywords": [],
@@ -24,6 +25,7 @@
     "dotenv": "^18.0.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
+    "google-auth-library": "^11.3.1",
     "pg": "^8.23.0",
     "zod": "^4.6.5"
   },

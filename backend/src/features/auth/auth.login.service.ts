@@ -1,17 +1,8 @@
 import { randomBytes } from "node:crypto";
 
 import { hashPassword, verifyPassword } from "./auth.password.js";
-
-import {
-  createSession,
-  findPasswordUserByEmail,
-} from "./auth.repository.js";
-
-import {
-  createSessionToken,
-  hashSessionToken,
-  SESSION_LIFETIME_MS,
-} from "./auth.session.js";
+import { findPasswordUserByEmail } from "./auth.repository.js";
+import { createUserSession } from "./auth.session.service.js";
 
 import type { LoginInput } from "./auth.validation.js";
 
@@ -20,8 +11,6 @@ import type { LoginInput } from "./auth.validation.js";
 const dummyPasswordHash = await hashPassword(
   randomBytes(32).toString("hex"),
 );
-
-// Initial product decision: a session lasts at most 24 hours.
 
 export async function loginUser(input: LoginInput) {
   const user = await findPasswordUserByEmail(input.email);
@@ -38,27 +27,9 @@ export async function loginUser(input: LoginInput) {
     return null;
   }
 
-const token = createSessionToken();
-
-const tokenHash =
-  hashSessionToken(token);
-
-  const expiresAt = new Date(Date.now() + SESSION_LIFETIME_MS);
-
-  await createSession({
-    userId: user.id,
-    tokenHash,
-    expiresAt,
+  return createUserSession({
+    id: user.id,
+    email: user.email,
+    displayName: user.displayName,
   });
-
-  return {
-    token,
-    expiresAt,
-
-    user: {
-      id: user.id,
-      email: user.email,
-      displayName: user.displayName,
-    },
-  };
 }

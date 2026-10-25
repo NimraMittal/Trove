@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
+export type * from './models/AuthIdentity.js'
 export type * from './models/Recipe.js'
 export type * from './models/RecipeIngredient.js'
 export type * from './models/RecipeStep.js'

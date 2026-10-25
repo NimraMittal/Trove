@@ -183,6 +183,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   passwordCredential?: Prisma.XOR<Prisma.PasswordCredentialNullableScalarRelationFilter, Prisma.PasswordCredentialWhereInput> | null
+  authIdentities?: Prisma.AuthIdentityListRelationFilter
   recipes?: Prisma.RecipeListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
 }
@@ -194,6 +195,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   passwordCredential?: Prisma.PasswordCredentialOrderByWithRelationInput
+  authIdentities?: Prisma.AuthIdentityOrderByRelationAggregateInput
   recipes?: Prisma.RecipeOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
 }
@@ -208,6 +210,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   passwordCredential?: Prisma.XOR<Prisma.PasswordCredentialNullableScalarRelationFilter, Prisma.PasswordCredentialWhereInput> | null
+  authIdentities?: Prisma.AuthIdentityListRelationFilter
   recipes?: Prisma.RecipeListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
 }, "id" | "email">
@@ -241,6 +244,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   recipes?: Prisma.RecipeCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
@@ -252,6 +256,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
@@ -263,6 +268,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   recipes?: Prisma.RecipeUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
@@ -274,6 +280,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   recipes?: Prisma.RecipeUncheckedUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -339,6 +346,20 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type UserCreateNestedOneWithoutAuthIdentitiesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthIdentitiesInput, Prisma.UserUncheckedCreateWithoutAuthIdentitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthIdentitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAuthIdentitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthIdentitiesInput, Prisma.UserUncheckedCreateWithoutAuthIdentitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthIdentitiesInput
+  upsert?: Prisma.UserUpsertWithoutAuthIdentitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthIdentitiesInput, Prisma.UserUpdateWithoutAuthIdentitiesInput>, Prisma.UserUncheckedUpdateWithoutAuthIdentitiesInput>
+}
+
 export type UserCreateNestedOneWithoutRecipesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutRecipesInput, Prisma.UserUncheckedCreateWithoutRecipesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutRecipesInput
@@ -381,6 +402,66 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
+export type UserCreateWithoutAuthIdentitiesInput = {
+  id?: string
+  email: string
+  displayName: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutUserInput
+  recipes?: Prisma.RecipeCreateNestedManyWithoutOwnerInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAuthIdentitiesInput = {
+  id?: string
+  email: string
+  displayName: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutUserInput
+  recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutOwnerInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAuthIdentitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthIdentitiesInput, Prisma.UserUncheckedCreateWithoutAuthIdentitiesInput>
+}
+
+export type UserUpsertWithoutAuthIdentitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthIdentitiesInput, Prisma.UserUncheckedUpdateWithoutAuthIdentitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthIdentitiesInput, Prisma.UserUncheckedCreateWithoutAuthIdentitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuthIdentitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthIdentitiesInput, Prisma.UserUncheckedUpdateWithoutAuthIdentitiesInput>
+}
+
+export type UserUpdateWithoutAuthIdentitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutUserNestedInput
+  recipes?: Prisma.RecipeUpdateManyWithoutOwnerNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuthIdentitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutUserNestedInput
+  recipes?: Prisma.RecipeUncheckedUpdateManyWithoutOwnerNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutRecipesInput = {
   id?: string
   email: string
@@ -388,6 +469,7 @@ export type UserCreateWithoutRecipesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
@@ -398,6 +480,7 @@ export type UserUncheckedCreateWithoutRecipesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -424,6 +507,7 @@ export type UserUpdateWithoutRecipesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
@@ -434,6 +518,7 @@ export type UserUncheckedUpdateWithoutRecipesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -443,6 +528,7 @@ export type UserCreateWithoutPasswordCredentialInput = {
   displayName: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   recipes?: Prisma.RecipeCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
@@ -453,6 +539,7 @@ export type UserUncheckedCreateWithoutPasswordCredentialInput = {
   displayName: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
@@ -479,6 +566,7 @@ export type UserUpdateWithoutPasswordCredentialInput = {
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   recipes?: Prisma.RecipeUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
@@ -489,6 +577,7 @@ export type UserUncheckedUpdateWithoutPasswordCredentialInput = {
   displayName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   recipes?: Prisma.RecipeUncheckedUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -500,6 +589,7 @@ export type UserCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordCredential?: Prisma.PasswordCredentialCreateNestedOneWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityCreateNestedManyWithoutUserInput
   recipes?: Prisma.RecipeCreateNestedManyWithoutOwnerInput
 }
 
@@ -510,6 +600,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordCredential?: Prisma.PasswordCredentialUncheckedCreateNestedOneWithoutUserInput
+  authIdentities?: Prisma.AuthIdentityUncheckedCreateNestedManyWithoutUserInput
   recipes?: Prisma.RecipeUncheckedCreateNestedManyWithoutOwnerInput
 }
 
@@ -536,6 +627,7 @@ export type UserUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordCredential?: Prisma.PasswordCredentialUpdateOneWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUpdateManyWithoutUserNestedInput
   recipes?: Prisma.RecipeUpdateManyWithoutOwnerNestedInput
 }
 
@@ -546,6 +638,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordCredential?: Prisma.PasswordCredentialUncheckedUpdateOneWithoutUserNestedInput
+  authIdentities?: Prisma.AuthIdentityUncheckedUpdateManyWithoutUserNestedInput
   recipes?: Prisma.RecipeUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
@@ -555,11 +648,13 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
  */
 
 export type UserCountOutputType = {
+  authIdentities: number
   recipes: number
   sessions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  authIdentities?: boolean | UserCountOutputTypeCountAuthIdentitiesArgs
   recipes?: boolean | UserCountOutputTypeCountRecipesArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
 }
@@ -572,6 +667,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuthIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuthIdentityWhereInput
 }
 
 /**
@@ -596,6 +698,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   passwordCredential?: boolean | Prisma.User$passwordCredentialArgs<ExtArgs>
+  authIdentities?: boolean | Prisma.User$authIdentitiesArgs<ExtArgs>
   recipes?: boolean | Prisma.User$recipesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -628,6 +731,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "displayName" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   passwordCredential?: boolean | Prisma.User$passwordCredentialArgs<ExtArgs>
+  authIdentities?: boolean | Prisma.User$authIdentitiesArgs<ExtArgs>
   recipes?: boolean | Prisma.User$recipesArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -639,6 +743,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     passwordCredential: Prisma.$PasswordCredentialPayload<ExtArgs> | null
+    authIdentities: Prisma.$AuthIdentityPayload<ExtArgs>[]
     recipes: Prisma.$RecipePayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
   }
@@ -1043,6 +1148,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   passwordCredential<T extends Prisma.User$passwordCredentialArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordCredentialArgs<ExtArgs>>): Prisma.Prisma__PasswordCredentialClient<runtime.Types.Result.GetResult<Prisma.$PasswordCredentialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  authIdentities<T extends Prisma.User$authIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recipes<T extends Prisma.User$recipesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recipesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1488,6 +1594,30 @@ export type User$passwordCredentialArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.PasswordCredentialInclude<ExtArgs> | null
   where?: Prisma.PasswordCredentialWhereInput
+}
+
+/**
+ * User.authIdentities
+ */
+export type User$authIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuthIdentity
+   */
+  select?: Prisma.AuthIdentitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuthIdentity
+   */
+  omit?: Prisma.AuthIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthIdentityInclude<ExtArgs> | null
+  where?: Prisma.AuthIdentityWhereInput
+  orderBy?: Prisma.AuthIdentityOrderByWithRelationInput | Prisma.AuthIdentityOrderByWithRelationInput[]
+  cursor?: Prisma.AuthIdentityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuthIdentityScalarFieldEnum | Prisma.AuthIdentityScalarFieldEnum[]
 }
 
 /**

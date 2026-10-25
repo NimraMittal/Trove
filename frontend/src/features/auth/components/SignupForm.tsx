@@ -1,10 +1,11 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { register } from "../api/auth.api";
+import PasswordField from "./PasswordField";
 
 import styles from "../auth.module.css";
 
@@ -14,6 +15,10 @@ export default function SignupForm() {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordTouched, setConfirmPasswordTouched] =
+    useState(false);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +46,12 @@ export default function SignupForm() {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setConfirmPasswordTouched(true);
+      confirmPasswordRef.current?.focus();
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -51,6 +62,7 @@ export default function SignupForm() {
       });
 
       setPassword("");
+      setConfirmPassword("");
       router.replace("/login");
     } catch (error: unknown) {
       setError(
@@ -106,28 +118,48 @@ export default function SignupForm() {
         />
       </div>
 
-      <div className={styles.field}>
-        <label htmlFor="signup-password">Password</label>
+      <PasswordField
+        id="signup-password"
+        name="password"
+        label="Password"
+        autoComplete="new-password"
+        placeholder="At least 15 characters"
+        value={password}
+        onChange={(event) => {
+          setPassword(event.target.value);
+          setError(null);
+        }}
+        minLength={15}
+        maxLength={128}
+        description="Use 15–128 characters. A long, memorable passphrase works well."
+        descriptionId="signup-password-help"
+        required
+        disabled={isSubmitting}
+      />
 
-        <input
-          id="signup-password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          placeholder="At least 15 characters"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          minLength={15}
-          maxLength={128}
-          aria-describedby="signup-password-help"
-          required
-          disabled={isSubmitting}
-        />
-
-        <small id="signup-password-help">
-          Use 15–128 characters. A long, memorable passphrase works well.
-        </small>
-      </div>
+      <PasswordField
+        id="signup-confirm-password"
+        label="Confirm password"
+        autoComplete="new-password"
+        placeholder="Enter your password again"
+        value={confirmPassword}
+        onChange={(event) => {
+          setConfirmPassword(event.target.value);
+          setError(null);
+        }}
+        onBlur={() => setConfirmPasswordTouched(true)}
+        inputRef={confirmPasswordRef}
+        minLength={15}
+        maxLength={128}
+        error={
+          confirmPasswordTouched && password !== confirmPassword
+            ? "Passwords do not match."
+            : null
+        }
+        errorId="signup-confirm-password-error"
+        required
+        disabled={isSubmitting}
+      />
 
       {error && (
         <p className={styles.errorMessage} role="alert">

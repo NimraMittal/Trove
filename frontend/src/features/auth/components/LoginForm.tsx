@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { login } from "../api/auth.api";
+import PasswordField from "./PasswordField";
 
 import styles from "../auth.module.css";
 
@@ -81,24 +82,21 @@ export default function LoginForm() {
         />
       </div>
 
-      <div className={styles.field}>
-        <label htmlFor="login-password">
-          Password
-        </label>
-
-        <input
-          id="login-password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="Your password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          maxLength={128}
-          required
-          disabled={isSubmitting}
-        />
-      </div>
+      <PasswordField
+        id="login-password"
+        name="password"
+        label="Password"
+        autoComplete="current-password"
+        placeholder="Your password"
+        value={password}
+        onChange={(event) => {
+          setPassword(event.target.value);
+          setError(null);
+        }}
+        maxLength={128}
+        required
+        disabled={isSubmitting}
+      />
 
       {error && (
         <p

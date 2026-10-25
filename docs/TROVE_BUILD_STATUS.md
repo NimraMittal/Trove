@@ -1,14 +1,15 @@
 # Trove build status
 
-Updated: 21 October 2026 (Asia/Kolkata).
+Updated: 25 October 2026 (Asia/Kolkata).
 
 ## Current review checkpoint
 
-Structured recipe data is implemented and locally verified on
-`feat/structured-recipes`. Changes remain unstaged and uncommitted for user
-review. The user handles all Git staging, commits, pushes, PRs, and merges.
-No recipe UI, detail API, creation flow, save, fork, collection, deployment,
-or production database work is included.
+Password visibility and authentication-form usability are implemented and
+locally verified on `feat/auth-password-visibility`. Changes remain unstaged
+and uncommitted for user review. The user handles all Git staging, commits,
+pushes, PRs, and merges. Google authentication, password recovery, email
+verification, backend authentication, database, and deployment changes are
+outside this PR.
 
 ## Milestone 0 — Authentication-aware header
 
@@ -61,7 +62,9 @@ that manual integration testing. DEPLOYED status was not verified here.
 
 ## Milestone 1 — Structured recipe data
 
-IMPLEMENTED and LOCALLY VERIFIED on `feat/structured-recipes`:
+MERGED through PR #20. Merge commit: `dd18ea4`. The user reports that the
+Render backend successfully deployed that commit; the exact production
+migration record remains pending build-log verification.
 
 - Added recipe-owned ingredients with UUIDs, names, optional decimal
   quantities, optional units and notes, and zero-based positions.
@@ -98,6 +101,43 @@ LIMITATIONS / PENDING:
   honest legacy source exists for backfill.
 - PostgreSQL check constraints live in customized migration SQL because
   Prisma Schema Language does not represent them.
-- Production migration is not applied. No deployment was performed.
-- This feature is not committed, pushed, or merged. The next feature remains
-  unapproved until this focused PR is reviewed and merged.
+- The production migration record has not been independently confirmed from
+  Render build logs.
+
+## Milestone 2 — Password visibility and authentication form UX
+
+IMPLEMENTED and LOCALLY VERIFIED on `feat/auth-password-visibility`:
+
+- Added a reusable password field with an inline eye control, hidden-by-default
+  values, stable spacing, and visible pointer and keyboard focus states.
+- Added password visibility controls to login, signup password, and signup
+  confirmation fields. Controls expose changing Show/Hide labels,
+  `aria-controls`, and pressed state without changing input values.
+- Added frontend-only password confirmation with an announced inline mismatch
+  error and focus movement to the invalid confirmation field.
+- Kept the registration API contract unchanged. Confirm Password has no form
+  name and is absent from the JSON request sent to Express.
+- Preserved `current-password` and `new-password` autocomplete values and the
+  existing login, registration, and redirect flows.
+
+Verification passed:
+
+- Frontend TypeScript typecheck.
+- Frontend ESLint with zero warnings.
+- Frontend production build.
+- Local Chrome regression against the production build: pointer and keyboard
+  visibility toggles, retained values, autocomplete/name semantics, login
+  failure and retry, success redirects, mismatch blocking and announcement,
+  exact registration payload, and layouts at 320, 768, and 1440 pixels.
+- Visual review of the signup form at desktop and mobile widths.
+
+The Chrome regression intercepts authentication requests with explicit test
+fixtures. It does not exercise Express, PostgreSQL, real cookies, password
+hashing, or a deployed environment. No real browser/backend authentication
+test was run for this frontend-only change.
+
+LIMITATIONS / PENDING:
+
+- The feature is not committed, pushed, merged, or deployed.
+- Google authentication remains a separate backend-foundation PR after this
+  PR is reviewed and merged.

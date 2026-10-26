@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import AuthLayout from "../components/AuthLayout";
+import GoogleAuthSection from "../components/GoogleAuthSection";
 import SignupForm from "../components/SignupForm";
 
 import styles from "../auth.module.css";
@@ -20,6 +21,8 @@ export default function SignupPage() {
       </div>
 
       <SignupForm />
+
+      <GoogleAuthSection />
 
       <p className={styles.switchText}>
         Already have an account?{" "}

@@ -294,6 +294,72 @@
   opacity: 0.65;
 }
 
+.googleAuthSection {
+  margin-top: 24px;
+}
+
+.authDivider {
+  margin-bottom: 20px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: center;
+
+  color: #8a766b;
+
+  font-size: 0.82rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.authDivider::before,
+.authDivider::after {
+  height: 1px;
+
+  background: #e3d7cc;
+
+  content: "";
+}
+
+.googleButtonFrame,
+.googleButtonContainer {
+  width: 100%;
+  min-height: 44px;
+}
+
+.googleButtonFrame {
+  display: grid;
+  place-items: center;
+}
+
+.googleButtonFrame[data-busy="true"] .googleButtonContainer {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.googleButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.googleStatusMessage,
+.googleErrorMessage {
+  margin: 10px 0 0;
+
+  font-size: 0.86rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.googleStatusMessage {
+  color: #79685f;
+}
+
+.googleErrorMessage {
+  color: #a83b24;
+}
+
 .field input:disabled {
   cursor: not-allowed;
   opacity: 0.7;

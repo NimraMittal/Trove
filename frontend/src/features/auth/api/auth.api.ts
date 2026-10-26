@@ -88,6 +88,74 @@ export async function login(
   return body.user;
 }
 
+function getGoogleAuthenticationError(status: number): string {
+  switch (status) {
+    case 400:
+    case 415:
+      return "Google sign-in sent an invalid request. Please try again.";
+    case 401:
+      return "Google could not verify this sign-in. Please try again.";
+    case 403:
+      return (
+        "This Google account cannot create a Trove account automatically. " +
+        "Use another Google account or continue with email and password."
+      );
+    case 409:
+      return (
+        "This email already has a Trove account. " +
+        "Sign in with your existing method."
+      );
+    case 429:
+      return "Too many Google sign-in attempts. Please wait and try again.";
+    case 503:
+      return "Google sign-in is temporarily unavailable. Please try again later.";
+    default:
+      return "Google sign-in is unavailable. Please try again.";
+  }
+}
+
+export async function authenticateWithGoogle(
+  credential: string,
+  signal?: AbortSignal,
+): Promise<AuthUser> {
+  const response = await fetch("/api/auth/google", {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+
+    credentials: "same-origin",
+    cache: "no-store",
+    signal,
+
+    body: JSON.stringify({ credential }),
+  }).catch((error: unknown) => {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    throw new Error(
+      "Could not reach Trove. Check your connection and try Google sign-in again.",
+    );
+  });
+
+  const body: unknown = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    throw new Error(getGoogleAuthenticationError(response.status));
+  }
+
+  if (!isLoginResponse(body)) {
+    throw new Error(
+      "Trove returned an unexpected Google sign-in response. Please try again.",
+    );
+  }
+
+  return body.user;
+}
+
 export async function register(
   input: SignupInput,
 ): Promise<void> {

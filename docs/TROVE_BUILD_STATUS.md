@@ -1,14 +1,15 @@
 # Trove build status
 
-Updated: 25 October 2026 (Asia/Kolkata).
+Updated: 26 October 2026 (Asia/Kolkata).
 
 ## Current review checkpoint
 
-Google authentication backend support is implemented and locally verified on
-`feat/auth-google-backend`. Changes remain unstaged and uncommitted for user
-review. The user handles all Git staging, commits, pushes, PRs, and merges.
-The Google button, explicit account linking, password recovery, and additional
-email verification remain separate future features.
+Google authentication frontend integration is implemented and locally verified
+with controlled browser fixtures on `feat/auth-google-ui`. Changes remain
+unstaged and uncommitted for user review. The user handles all Git staging,
+commits, pushes, PRs, and merges. Real Google account selection and local and
+deployed end-to-end verification remain pending. Explicit account linking,
+password recovery, and additional email verification remain separate features.
 
 ## Milestone 0 — Authentication-aware header
 
@@ -137,7 +138,7 @@ test was run for this frontend-only change.
 
 ## Milestone 3 — Google authentication backend foundation
 
-IMPLEMENTED and LOCALLY VERIFIED on `feat/auth-google-backend`:
+MERGED through PR #22. Merge commit: `780e568`.
 
 - Added provider identities keyed by the verified Google `sub`, with unique
   provider/subject and user/provider constraints and cascade deletion.
@@ -176,3 +177,43 @@ DEPENDENCY FOLLOW-UP:
   express-rate-limit, Prisma, and Zod. `google-auth-library` is not in any
   reported vulnerable path. The dry-run remediation changes several existing
   packages together, so it belongs in a focused dependency-maintenance PR.
+
+## Milestone 4 — Google authentication frontend
+
+IMPLEMENTED and MOCK-VERIFIED on `feat/auth-google-ui`:
+
+- Added one reusable Google authentication section to login and signup with a
+  stable `or` divider and responsive official GIS-rendered button.
+- Loaded `https://accounts.google.com/gsi/client` through Next.js Script only
+  on auth pages and configured callback popup mode with One Tap and automatic
+  account selection disabled.
+- Sent only the returned credential to `POST /api/auth/google`, validated the
+  success response, reused the existing `/recipes` redirect and session-aware
+  header, and did not decode or store the Google token in browser storage.
+- Added controlled messages for invalid/rejected/ineligible/collision,
+  rate-limit, unavailable, network, and malformed-response outcomes. Existing
+  email/password forms and account-linking policy remain unchanged.
+- Added Google Cloud, local, Vercel, Render, CSP/COOP, and manual end-to-end
+  setup guidance in `docs/GOOGLE_AUTH_FRONTEND.md`.
+
+Local verification passed:
+
+- Frontend TypeScript typecheck.
+- Frontend ESLint with zero warnings.
+- Frontend production build using Next.js 16.3.5.
+- Existing password-form and session-aware-header Chrome regressions.
+- New mocked GIS Chrome regression: script failure/recovery, single
+  initialization, popup/no-One-Tap configuration, cancellation, all documented
+  API statuses, network and malformed-success handling, duplicate suppression,
+  keyboard operation, exact request body, no browser token storage, mocked
+  login/refresh/logout/revocation, and 320/768/1440-pixel layouts.
+
+The browser regression intercepts the GIS library and authentication API with
+synthetic fixtures. It does not contact Google or Express and does not verify
+real ID-token signatures, PostgreSQL sessions, HttpOnly cookies, or deployed
+configuration. Local frontend/backend Google client ID keys are present,
+well-formed, and match, without exposing their values. A non-interactive Chrome
+check loaded the live GIS script and rendered Google's iframe on
+`http://localhost:3001`; it did not select an account or send a credential. A
+real Google account flow and deployed Vercel → Render flow are still required
+before calling the feature production-ready.

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import AuthLayout from "../components/AuthLayout";
+import GoogleAuthSection from "../components/GoogleAuthSection";
 import LoginForm from "../components/LoginForm";
 
 import styles from "../auth.module.css";
@@ -23,6 +24,8 @@ export default function LoginPage() {
       </div>
 
       <LoginForm />
+
+      <GoogleAuthSection />
 
       <p className={styles.switchText}>
         New to Trove?{" "}

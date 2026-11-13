@@ -1,15 +1,18 @@
 # Trove build status
 
-Updated: 26 October 2026 (Asia/Kolkata).
+Updated: 13 November 2026 (Asia/Kolkata).
 
 ## Current review checkpoint
 
-Google authentication frontend integration is implemented and locally verified
-with controlled browser fixtures on `feat/auth-google-ui`. Changes remain
-unstaged and uncommitted for user review. The user handles all Git staging,
-commits, pushes, PRs, and merges. Real Google account selection and local and
-deployed end-to-end verification remain pending. Explicit account linking,
-password recovery, and additional email verification remain separate features.
+The read-only recipe detail API is implemented and locally verified on
+`feat/recipe-detail-api`. Changes remain unstaged and uncommitted for user
+review. The user handles all Git staging, commits, pushes, PRs, and merges.
+The recipe detail frontend remains a separate future feature.
+
+Final local review completed on 13 November 2026. The branch and local `main`
+both point to `f1ad010` (PR #23); no feature commits or staged files exist yet.
+The feature consists of eight changed/new files. Staging, committing, pushing,
+PR creation, merge, and deployed verification are pending user action.
 
 ## Milestone 0 — Authentication-aware header
 
@@ -180,7 +183,7 @@ DEPENDENCY FOLLOW-UP:
 
 ## Milestone 4 — Google authentication frontend
 
-IMPLEMENTED and MOCK-VERIFIED on `feat/auth-google-ui`:
+MERGED through PR #23. Merge commit: `f1ad010`.
 
 - Added one reusable Google authentication section to login and signup with a
   stable `or` divider and responsive official GIS-rendered button.
@@ -217,3 +220,51 @@ check loaded the live GIS script and rendered Google's iframe on
 `http://localhost:3001`; it did not select an account or send a credential. A
 real Google account flow and deployed Vercel → Render flow are still required
 before calling the feature production-ready.
+
+## Milestone 5 — Recipe detail API
+
+IMPLEMENTED and LOCALLY VERIFIED on `feat/recipe-detail-api`:
+
+- Added `GET /api/recipes/:id` with UUID validation and a direct recipe-detail
+  response containing current recipe metadata, owner ID, creator display name,
+  structured ingredients, and ordered cooking steps.
+- Applied public-or-owner visibility filtering inside the Prisma query so an
+  unauthorized private recipe and its children are never loaded for response.
+- Added reusable optional session resolution. Missing, invalid, and expired
+  sessions continue as anonymous; expired records retain existing cleanup;
+  unexpected session failures reach the shared error handler.
+- Returned the same controlled `404` for inaccessible private and nonexistent
+  recipes, and applied `Cache-Control: private, no-store` before validation or
+  authentication on every detail response.
+- Serialized timestamps as ISO 8601 strings and Prisma Decimal quantities with
+  `toString()`. Nullable ingredient values stay `null`, and recipes without
+  structured children return empty arrays.
+- Kept the public discovery endpoint and its four-field response unchanged.
+
+Local verification passed:
+
+- Prisma schema validation; no schema or migration changes.
+- Prisma Client generation using the existing Prisma 7 configuration, with no
+  generated-file changes.
+- Backend TypeScript typecheck and production build.
+- 3 existing password-authentication tests.
+- 22 existing Google-authentication tests.
+- 2 existing structured-recipe and discovery tests.
+- 12 passing recipe-detail test entries (2 parent tests and 10 subtests) covering public and private access,
+  two users, invalid and expired sessions, identical privacy-preserving 404s,
+  UUID validation, ordering, decimal strings, nullable values, legacy empty
+  arrays, safe creator output, cache headers, and controlled repository and
+  session failures.
+
+All database suites were guarded to local loopback `trove_development`, used
+unique temporary records, and cleaned up by explicit IDs. No production data,
+migrations, frontend code, or deployment configuration were changed.
+
+Final review reran Prisma validation, backend typecheck, production build
+(including Prisma Client generation), and all four suites above successfully.
+The initial sandboxed test attempt could not open the tsx IPC socket; the
+successful test rerun used approved local socket/database access. Expected
+generic error logs came from the two intentional failure-path tests.
+The complete tracked diff and both new files were reviewed; `git diff --check`
+passed. No secrets, accidental files, or unrelated application changes were
+found. No frontend or deployed end-to-end checks were run for this API PR.

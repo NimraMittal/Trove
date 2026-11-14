@@ -1,15 +1,18 @@
 # Trove build status
 
-Updated: 26 October 2026 (Asia/Kolkata).
+Updated: 13 November 2026 (Asia/Kolkata).
 
 ## Current review checkpoint
 
-Google authentication frontend integration is implemented and locally verified
-with controlled browser fixtures on `feat/auth-google-ui`. Changes remain
-unstaged and uncommitted for user review. The user handles all Git staging,
-commits, pushes, PRs, and merges. Real Google account selection and local and
-deployed end-to-end verification remain pending. Explicit account linking,
-password recovery, and additional email verification remain separate features.
+Recipe Detail UI is implemented and locally verified on
+`feat/recipe-detail-ui`. UI changes remain unstaged and uncommitted. The user
+handles branching, staging, commits, pushes, PR creation, and merging.
+
+The branch includes Recipe Detail API commit `a1e2dab`. Local `main` still
+points to `f1ad010` (PR #23); the API's remote merge/deployment status was not
+verified. Before opening the UI PR against `main`, confirm the API is merged
+and that the PR diff contains only the UI feature. Neither feature is marked
+as deployed by this review.
 
 ## Milestone 0 — Authentication-aware header
 
@@ -180,7 +183,7 @@ DEPENDENCY FOLLOW-UP:
 
 ## Milestone 4 — Google authentication frontend
 
-IMPLEMENTED and MOCK-VERIFIED on `feat/auth-google-ui`:
+MERGED through PR #23. Merge commit: `f1ad010`.
 
 - Added one reusable Google authentication section to login and signup with a
   stable `or` divider and responsive official GIS-rendered button.
@@ -217,3 +220,131 @@ check loaded the live GIS script and rendered Google's iframe on
 `http://localhost:3001`; it did not select an account or send a credential. A
 real Google account flow and deployed Vercel → Render flow are still required
 before calling the feature production-ready.
+
+## Milestone 5 — Recipe detail API
+
+IMPLEMENTED and LOCALLY VERIFIED on `feat/recipe-detail-api`:
+
+- Added `GET /api/recipes/:id` with UUID validation and a direct recipe-detail
+  response containing current recipe metadata, owner ID, creator display name,
+  structured ingredients, and ordered cooking steps.
+- Applied public-or-owner visibility filtering inside the Prisma query so an
+  unauthorized private recipe and its children are never loaded for response.
+- Added reusable optional session resolution. Missing, invalid, and expired
+  sessions continue as anonymous; expired records retain existing cleanup;
+  unexpected session failures reach the shared error handler.
+- Returned the same controlled `404` for inaccessible private and nonexistent
+  recipes, and applied `Cache-Control: private, no-store` before validation or
+  authentication on every detail response.
+- Serialized timestamps as ISO 8601 strings and Prisma Decimal quantities with
+  `toString()`. Nullable ingredient values stay `null`, and recipes without
+  structured children return empty arrays.
+- Kept the public discovery endpoint and its four-field response unchanged.
+
+Local verification passed:
+
+- Prisma schema validation; no schema or migration changes.
+- Prisma Client generation using the existing Prisma 7 configuration, with no
+  generated-file changes.
+- Backend TypeScript typecheck and production build.
+- 3 existing password-authentication tests.
+- 22 existing Google-authentication tests.
+- 2 existing structured-recipe and discovery tests.
+- 12 passing recipe-detail test entries (2 parent tests and 10 subtests) covering public and private access,
+  two users, invalid and expired sessions, identical privacy-preserving 404s,
+  UUID validation, ordering, decimal strings, nullable values, legacy empty
+  arrays, safe creator output, cache headers, and controlled repository and
+  session failures.
+
+All database suites were guarded to local loopback `trove_development`, used
+unique temporary records, and cleaned up by explicit IDs. No production data,
+migrations, frontend code, or deployment configuration were changed.
+
+Final review reran Prisma validation, backend typecheck, production build
+(including Prisma Client generation), and all four suites above successfully.
+The initial sandboxed test attempt could not open the tsx IPC socket; the
+successful test rerun used approved local socket/database access. Expected
+generic error logs came from the two intentional failure-path tests.
+The complete tracked diff and both new files were reviewed; `git diff --check`
+passed. No secrets, accidental files, or unrelated application changes were
+found. No frontend or deployed end-to-end checks were run for this API PR.
+
+
+## Milestone 6 — Recipe Detail UI (Day 0)
+
+IMPLEMENTED and LOCALLY VERIFIED on `feat/recipe-detail-ui`, 13 November 2026:
+
+- Added `/recipes/[id]` with Promise-based route params for the installed
+  Next.js version, dedicated loading/error boundaries, and the existing
+  shared recipes header/layout.
+- Added a browser-only request path through relative `/api/recipes/:id` with
+  same-origin session cookies, no-store requests, cancellation, and a timeout.
+  Discovery's existing server-only helper and response remain unchanged.
+- Validated recipe IDs and the full detail response at runtime, including
+  Decimal strings, nullable fields, ordered positions, and matching IDs.
+- Rendered actual title, description, category, creator display name,
+  public/private label, ordered ingredients with quantities/units/notes, and
+  semantic numbered instructions. Decimal quantities are never converted to
+  JavaScript numbers.
+- Added accessible loading, invalid-link, indistinguishable missing/inaccessible,
+  network, server, malformed-response, and empty-content views with discovery
+  links and keyboard-accessible retry where appropriate.
+- Rechecked loaded recipes on browser focus/history restoration; cancelled
+  requests on navigation. Focus rechecks leave errors and active requests alone
+  so they do not interrupt retry interaction.
+- Linked whole discovery cards to their actual UUIDs using Next.js Link,
+  preserving the grid and existing discovery behavior, with visible keyboard
+  focus outlines.
+- Used an image-free ivory/orange/brown editorial layout with serif headings,
+  rounded ingredient cards, and stacked mobile sections. No image field exists
+  in the API; no images, schema changes, migrations, or backend changes added.
+
+Verification:
+
+- Frontend TypeScript typecheck, ESLint with zero warnings, and production build
+  passed. The initial sandbox build could not download existing Geist fonts;
+  the approved network-enabled build passed without code/configuration changes.
+- Existing Chrome header, password-form, and mocked Google authentication
+  regressions passed against the production build served locally.
+- New `npm run test:recipe-detail` Chrome regression passed: public content,
+  guest/signed-in header, owner/private fixture, access recheck, logout,
+  indistinguishable inaccessible/missing responses, exact decimal strings,
+  whole/null/zero quantities, optional units/notes, ordered ingredients/steps,
+  empty arrays, invalid UUID without fetch, HTTP 400/404/503, network failure,
+  malformed/mismatched/unordered responses, keyboard retry, real discovery-ID
+  navigation, single shared header, and long-content layouts at
+  320/375/768/1440 pixels.
+- The new browser script uses explicitly synthetic detail/auth fixtures and
+  blocks external requests during those cases. Discovery IDs come from the
+  actual local server-rendered discovery page. It creates no database records.
+- An optional unmocked browser check rendered existing public recipe
+  `00000000-0000-4000-8000-000000000003` through Next.js → Express → PostgreSQL.
+  Desktop/mobile screenshots were visually reviewed. That legacy recipe has
+  empty structured arrays; populated content was verified with browser fixtures.
+- Backend recipe detail integration suite rerun: 12 passing test entries,
+  including two parents, using real local sessions and two users. It verifies
+  public/owner/non-owner access, invalid/expired sessions, ordered children,
+  serialization, privacy-preserving responses, and controlled failures.
+- Final tracked diff and new files reviewed; `git diff --check` passed.
+  No secrets, environment files, unrelated application changes, generated files,
+  package upgrades, or lockfile changes were introduced.
+
+Limitations and next step:
+
+- Real signed-in/private browser interaction was mocked; backend session and
+  authorization integration tests were real. No real Google account selection
+  or deployed end-to-end verification was performed for this feature.
+- Recipe image upload/storage and private-image delivery remain future work.
+- API commit `a1e2dab` must be available in the deployed backend before releasing
+  the UI. Merge and deployment states remain pending independent verification.
+- After this UI PR is reviewed and merged, the next recommended feature is
+  authenticated recipe creation with structured ingredients and instructions.
+  No creation, saves, collections, or other roadmap work was started.
+
+Run Chrome checks with the local production frontend on port 3001 and local
+backend/discovery data available. From `frontend/`, run `npm run test:recipe-detail`.
+Requires Chrome and a Node version with global WebSocket support (Node 24 was
+used). Optional `RECIPE_DETAIL_REAL_ID` enables the existing-public-recipe read;
+`RECIPE_DETAIL_SCREENSHOT_DIR` saves screenshots outside the repository.
+`RECIPE_DETAIL_TEST_URL` accepts only an HTTP loopback origin without credentials.
+The script uses an isolated temporary Chrome profile and cleans it up on exit.

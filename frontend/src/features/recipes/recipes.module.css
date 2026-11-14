@@ -23,6 +23,7 @@
 }
 
 .card {
+  position: relative;
   min-width: 0;
   padding: 24px;
   border: 1px solid #e4ddd2;
@@ -64,4 +65,24 @@
   color: white;
   font: inherit;
   cursor: pointer;
+}
+
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+
+.card:has(.cardLink:hover) {
+  border-color: #b56843;
+}
+
+.cardLink:focus-visible {
+  outline: none;
+}
+
+.cardLink:focus-visible::after {
+  outline: 3px solid #9a3412;
+  outline-offset: 4px;
 }

@@ -1,0 +1,50 @@
+.page {
+  flex: 1;
+  min-height: 75vh;
+  padding: 36px 24px 64px;
+  background: #f8f5ef;
+  color: #38291f;
+  color-scheme: light;
+}
+
+.container { max-width: 1120px; margin: 0 auto; }
+.backLink { display: inline-flex; align-items: center; min-height: 44px; color: #91401f; font-size: 0.9rem; font-weight: 600; }
+.backLink:hover, .footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.intro { max-width: 850px; padding: 34px 0 40px; }
+.eyebrow { margin: 0 0 14px; color: #99421f; font-size: 0.75rem; line-height: 1.6; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; overflow-wrap: anywhere; }
+.title { margin: 0 0 22px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4.3rem); font-weight: 500; line-height: 1.1; letter-spacing: -0.035em; overflow-wrap: anywhere; }
+.description { max-width: 720px; font-size: 1.1rem; line-height: 1.85; color: #66584b; white-space: pre-wrap; overflow-wrap: anywhere; }
+.metadata { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 26px; font-size: 0.88rem; line-height: 1.6; color: #66584b; overflow-wrap: anywhere; }
+.metadata p { min-width: 0; }
+.creator { color: #38291f; font-weight: 600; }
+.visibility { padding: 5px 12px; border: 1px solid #dfd5c5; border-radius: 24px; color: #715437; font-size: 0.78rem; }
+.content { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr); align-items: start; gap: 48px; border-top: 1px solid #e1d8cb; padding-top: 40px; }
+.content h2 { margin: 0 0 26px; font-family: Georgia, 'Times New Roman', serif; font-size: 1.9rem; font-weight: 500; }
+.ingredients { min-width: 0; padding: 30px; border: 1px solid #e5dccf; border-radius: 18px; background: #fffdf8; box-shadow: 0 4px 20px #5b351206; }
+.ingredientList { list-style: none; }
+.ingredientList li { padding: 16px 0; border-top: 1px solid #eee6da; line-height: 1.65; overflow-wrap: anywhere; }
+.quantity { font-weight: 700; color: #803c20; }
+.notes { font-size: 0.88rem; color: #736456; margin-top: 4px; white-space: pre-wrap; }
+.instructions { min-width: 0; padding: 30px 0; }
+.stepList { padding-left: 2.4rem; }
+.stepList li { padding: 0 0 28px 12px; line-height: 1.85; }
+.stepList li::marker { color: #a34420; font-family: Georgia, serif; font-size: 1.4rem; font-weight: 700; }
+.stepList p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.empty { color: #736456; line-height: 1.75; }
+.footer { margin-top: 44px; padding-top: 24px; border-top: 1px solid #e1d8cb; color: #736456; font-size: 0.9rem; line-height: 1.8; }
+.footer a { display: inline-block; min-height: 44px; padding: 8px 0; color: #91401f; font-weight: 600; }
+.state { max-width: 720px; margin: 48px auto; padding: 42px; background: #fffdf8; border: 1px solid #e5dccf; border-radius: 18px; }
+.stateTitle { font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.7rem); font-weight: 500; margin-bottom: 20px; }
+.state p { line-height: 1.8; color: #66584b; }
+.retryButton { min-height: 44px; padding: 12px 24px; margin-top: 24px; background: #a34420; color: #fffdf8; border: 0; border-radius: 9px; font: inherit; font-weight: 600; cursor: pointer; }
+.retryButton:hover { background: #853619; }
+.page a:focus-visible, .retryButton:focus-visible { outline: 3px solid #99421f; outline-offset: 5px; border-radius: 3px; }
+
+@media (max-width: 700px) {
+  .page { padding: 20px 20px 40px; }
+  .intro { padding: 24px 0 30px; }
+  .content { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-top: 28px; }
+  .ingredients { padding: 24px; }
+  .instructions { padding-top: 26px; }
+  .state { margin: 24px 0; padding: 26px; }
+}
